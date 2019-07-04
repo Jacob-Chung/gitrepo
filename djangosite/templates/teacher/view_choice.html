@@ -1,0 +1,331 @@
+{#{% extends 'teacherbase.html' %}#}
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<!-- saved from url=(0043)https://v3.bootcss.com/examples/dashboard/# -->
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+
+    <title>选择题详情</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="{% static 'js/bootstrap-table.min.js' %}"></script>
+    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-table-zh-CN.min.js' %}"></script>
+    <script src="{% static 'js/colResizable-1.6.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-table-resizable.min.js' %}"></script>
+
+    <script>
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+
+            if (arr = document.cookie.match(reg))
+
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+
+
+        // 查询订单 请求
+        $(document).ready(function () {
+            $('#confirm_bt').click(function () {
+                alert('操作成功！')
+            });
+            $('#check_all').click(function () {
+                if ($(this).prop('checked'))
+
+                    $('input:checkbox').each(function () {
+                        $(this).prop('checked', true);
+                    });
+                else
+                    $('input:checkbox').each(function () {
+                        $(this).prop('checked', false)
+                    });
+
+            });
+
+            $('#del_bt').click(function () {
+
+                if (confirm('删除后无法恢复，您确定要删除吗?')) {
+
+                    $('input:checkbox:checked').each(function () {
+                        var list = new Array();
+                        if ($(this).attr("id") !== "check_all") {
+                            list.push($(this).val());
+                            {#var list =#}
+                        }
+                        {#list = $.makeArray(list);#}
+                        $.ajax({
+                            url: "/exercise/del_student/",
+                            type: "get",
+                            data: {'list': JSON.stringify(list)},
+                            {#headers: {"X-CSRFtoken": $.cookie("csrftoken")},#}
+                            async: false,
+                            success: function (arg) {
+                                alert("删除成功");
+                                window.location.href = "/exercise/all_student/";
+                            }
+                        });
+                        {#$.post("/exercise/del_student/", {'list': list}, function (data, status) {#}
+                        {#        alert("删除成功");#}
+                        {#        window.location.href = "/exercise/all_student/";#}
+                        {#    }#}
+                        {#);#}
+                    });
+
+                }
+            })
+        });
+
+
+    </script>
+
+    <script>
+        window.onload = function () {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                title: {
+                    text: "答题详情"
+                },
+                data: [{
+                    type: "doughnut",
+                    startAngle: 60,
+                    //innerRadius: 60,
+                    indexLabelFontSize: 17,
+                    indexLabel: "{label} - #percent%",
+                    toolTipContent: "<b>{label}:</b> {y}人(#percent%)",
+                    dataPoints: [
+                        {y: {{ numberA }}, label: "A"},
+                        {y: {{ numberB }}, label: "B"},
+                        {y: {{ numberC }}, label: "C"},
+                        {y: {{ numberD }}, label: "D"},
+
+                    ]
+                }]
+            });
+            chart.render();
+
+            var chart1;
+            chart1 = new CanvasJS.Chart("chartContainer1",
+                {
+                    theme: "light2",
+                    title: {
+                        text: "正确率"
+                    },
+                    data: [
+                        {
+                            type: "pie",
+                            showInLegend: true,
+                            toolTipContent: "{y}人 - #percent %",
+                            {#yValueFormatString: "#,##0,,.## Million",#}
+                            legendText: "{indexLabel}",
+                            dataPoints: [
+                                {y: {{ rightNum }}, indexLabel: "正确"},
+                                {y: {{ wrongNum }}, indexLabel: "错误"},
+                            ]
+                        }
+                    ]
+                });
+            chart1.render();
+
+        }
+
+
+    </script>
+
+</head>
+
+
+<body>
+{% include 'teacherbase.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/test_situation/">考试情况 <span
+                        class="sr-only">(current)</span></a></li>
+                <li><a href="/exercise/compose_test">出卷组题</a></li>
+                {#        <li><a href="https://v3.bootcss.com/examples/dashboard/#">试题批改</a></li>#}
+                <li><a href="/exercise/set_rules">出题规则</a></li>
+
+            </ul>
+{#            <ul class="nav nav-sidebar">#}
+{#                <li><a href="https://v3.bootcss.com/examples/dashboard/">论坛</a></li>#}
+{#                <li><a href="https://v3.bootcss.com/examples/dashboard/">我的留言</a></li>#}
+                {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">One more nav</a></li>#}
+                {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">Another nav item</a></li>#}
+                {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">More navigation</a></li>#}
+{#            </ul>#}
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="/exercise/question_bank">题库审阅</a></li>
+                <li><a href="/exercise/choice_upload">选择题导入</a></li>
+                <li><a href="/exercise/fillin_upload">填空题导入</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/all_student">学生信息查询</a></li>
+                <li><a href="/exercise/student_upload">学生信息导入</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/login/bbs_index/">计网论坛</a></li>
+            </ul>
+        </div>
+
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            {#          <h1 class="page-header">题库审阅</h1>#}
+
+            <h2 class="sub-header">选择题详情</h2>
+
+            <div id="queryResult" style="width: 40%;" class="col-md-4 col-md-offset-1">
+
+                <form action="/exercise/update_choice/" method="post">
+                    {% csrf_token %}
+                    {#                        把原本的questionId传过去#}
+                    <input type="hidden" name="questionId" value="{{ my_choice.questionId }}">
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">题目：</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control bt" name="questionContent"
+                                   value="{{ my_choice.questionContent }}">
+                        </div>
+                    </div>
+                    <br/><br/><br/>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">章节：</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control bt" name="questionSection"
+                                   value="{{ my_choice.questionSection }}">
+                        </div>
+                    </div>
+                    <br/><br/><br/>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">A：</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control bt" name="answer1"
+                                   value="{{ my_choice.answer1 }}">
+                        </div>
+                    </div>
+                    <br/><br/><br/>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">B：</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control bt" name="answer2"
+                                   value="{{ my_choice.answer2 }}">
+                        </div>
+                    </div>
+                    <br/><br/><br/>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">C：</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control bt" name="answer3"
+                                   value="{{ my_choice.answer3 }}">
+                        </div>
+                    </div>
+                    <br/><br/><br/>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">D：</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control bt" name="answer4"
+                                   value="{{ my_choice.answer4 }}">
+                        </div>
+                    </div>
+                    <br/><br/><br/>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">正确答案</label>
+                        <div class="col-xs-10">
+                            <select name="rightAnswer" class="form-control selector-add">
+                                {% if my_choice.rightAnswer == 'A' %}
+                                    <option value="A" selected="selected">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                {% elif my_choice.rightAnswer == 'B' %}
+                                    <option value="A">A</option>
+                                    <option value="B" selected="selected">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                {% elif my_choice.rightAnswer == 'C' %}
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C" selected="selected">C</option>
+                                    <option value="D">D</option>
+                                {% else %}
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D" selected="selected">D</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <br/><br/><br/>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">分值：</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control bt" name="diff"
+                                   value="{{ my_choice.diff }}">
+                        </div>
+                    </div>
+                    <br/><br/><br/>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">难度：</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control bt" value="{{ my_choice.grade }}" readonly>
+                        </div>
+                    </div>
+                    <br/><br/><br/>
+                    <div class="col-md-offset-6">
+                        <input type="submit" id="confirm_bt" value="确认">
+                    </div>
+
+                </form>
+
+
+            </div>
+
+            <div class="col-md-6">
+                <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
+                <div id="chartContainer1" style="height: 300px; width: 100%;"></div>
+                <script src="{% static 'js/canvasjs.min.js' %}"></script>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

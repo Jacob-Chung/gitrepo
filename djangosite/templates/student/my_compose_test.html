@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>已完成的测试</title>
+
+    <!-- Bootstrap -->
+    <link href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    {#    <link rel="stylesheet" type="text/css" href="css/build.css">#}
+
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        function changeState(el) {
+            if (el.readOnly) el.checked = el.readOnly = false;
+            else if (!el.checked) el.readOnly = el.indeterminate = true;
+        }
+
+        function MM_jumpMenu(targ, selObj, restore) { //v3.0
+            eval(targ + ".location='" + selObj.options[selObj.selectedIndex].value + "'");
+            if (restore) selObj.selectedIndex = 0;
+        }
+
+
+    </script>
+
+</head>
+<body>
+
+<div class="container-fluid">
+    {% include 'studentbase.html' %}
+    <div class="col-sm-3 col-md-1 sidebar">
+
+    </div>
+
+
+    <div class="col-md-10 ">
+
+        <h3>选择题</h3>
+        <table class="table table-bordered">
+            <tr>
+                <th>序号</th>
+                <th>章节</th>
+                <th>问题</th>
+                <th>A</th>
+                <th>B</th>
+                <th>C</th>
+                <th>D</th>
+                <th>正确答案</th>
+                <th>你的答案</th>
+                <th>得分</th>
+            </tr>
+            {% for li in my_choice %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+{#                    <td>{{ li.chapter }}</td>#}
+                    {% for list in choice_list %}
+                        {% if list.questionId == li.questionId %}
+                            <td>{{ list.questionSection }}</td>
+                            <td>{{ list.questionContent }}</td>
+                            <td>{{ list.answer1 }}</td>
+                            <td>{{ list.answer2 }}</td>
+                            <td>{{ list.answer3 }}</td>
+                            <td>{{ list.answer4 }}</td>
+                            <td>{{ list.rightAnswer }}</td>
+                        {% endif %}
+                    {% endfor %}
+
+
+                    <td>{{ li.answer }}</td>
+                    <td>{{ li.correct }}</td>
+
+                </tr>
+            {% endfor %}
+
+        </table>
+
+
+        <h3>填空题</h3>
+        <table class="table table-bordered">
+            <tr>
+                <th>序号</th>
+                <th>章节</th>
+                <th>问题</th>
+                <th>答案1</th>
+                <th>答案2</th>
+                <th>答案3</th>
+                <th>有序</th>
+                <th>你的答案1</th>
+                <th>你的答案2</th>
+                <th>你的答案3</th>
+                <th>得分</th>
+            </tr>
+            {% for li in my_fillin %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+{#                    <td>{{ li.chapter }}</td>#}
+                    {% for list in fillin_list %}
+                        {% if list.fillinId == li.fillinId %}
+                            <td>{{ list.fillinSection }}</td>
+                            <td>{{ list.fillinContent }}</td>
+                            {% if list.diff == 1 %}
+                                <td>{{ list.answer1 }}</td>
+                                <td>空</td>
+                                <td>空</td>
+                            {% elif list.diff == 2 %}
+                                <td>{{ list.answer1 }}</td>
+                                <td>{{ list.answer2 }}</td>
+                                <td>空</td>
+                            {% elif list.diff == 3 %}
+                                <td>{{ list.answer1 }}</td>
+                                <td>{{ list.answer2 }}</td>
+                                <td>{{ list.answer3 }}</td>
+                            {% endif %}
+
+                            {% if list.is_order == 1 %}
+                                <td>是</td>
+                            {% else %}
+                                <td>否</td>
+                            {% endif %}
+
+
+
+                        {% endif %}
+                    {% endfor %}
+
+
+                    <td>{{ li.ans1 }}</td>
+                    <td>{{ li.ans2 }}</td>
+                    <td>{{ li.ans3 }}</td>
+                    <td>{{ li.correct }}</td>
+
+                </tr>
+            {% endfor %}
+
+        </table>
+        <h3>成绩</h3>
+        <table class="table">
+            <tr>
+                <th>选择题得分</th>
+                <th>填空题得分</th>
+                <th>总得分</th>
+            </tr>
+            <tr>
+                <td>{{ choice_score }}</td>
+                <td>{{ fillin_score }}</td>
+                <td>{{ choice_score|add:fillin_score }}</td>
+            </tr>
+        </table>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

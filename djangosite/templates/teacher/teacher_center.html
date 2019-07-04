@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<!-- saved from url=(0043)https://v3.bootcss.com/examples/dashboard/# -->
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>个人中心</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/lianxi.css' %}">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+
+    <script type="text/javascript">
+        function validate() {
+            var pwd1 = document.getElementById("pwd").value;
+            var pwd2 = document.getElementById("pwd1").value;
+
+            <!-- 对比两次输入的密码 -->
+            if (pwd1 == pwd2) {
+                document.getElementById("tips").innerHTML = "<font color='green'>验证通过</font>";
+                document.getElementById("button").disabled = false;
+            } else {
+                document.getElementById("tips").innerHTML = "<font color='red'>两次密码不相同</font>";
+                document.getElementById("button").disabled = true;
+            }
+        }
+    </script>
+    <style>
+
+        canvas {
+            background: #9AA4FF;
+        }
+
+    </style>
+
+
+</head>
+
+
+<body>
+{% include 'teacherbase.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/test_situation/">考试情况 <span
+                        class="sr-only">(current)</span></a></li>
+                <li><a href="/exercise/compose_test">出卷组题</a></li>
+                {#        <li><a href="https://v3.bootcss.com/examples/dashboard/#">试题批改</a></li>#}
+                <li><a href="/exercise/set_rules">出题规则</a></li>
+
+            </ul>
+{#            <ul class="nav nav-sidebar">#}
+{#                <li><a href="https://v3.bootcss.com/examples/dashboard/">论坛</a></li>#}
+{#                <li><a href="https://v3.bootcss.com/examples/dashboard/">我的留言</a></li>#}
+                {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">One more nav</a></li>#}
+                {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">Another nav item</a></li>#}
+                {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">More navigation</a></li>#}
+{#            </ul>#}
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/question_bank">题库审阅</a></li>
+                <li><a href="/exercise/choice_upload">选择题导入</a></li>
+                <li><a href="/exercise/fillin_upload">填空题导入</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/all_student">学生信息查询</a></li>
+               <li><a href="/exercise/student_upload">学生信息导入</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/login/bbs_index/">计网论坛</a></li>
+            </ul>
+        </div>
+
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h2 class="sub-header">个人中心</h2>
+            <div>
+                <h4>个人资料</h4>
+                <form action="/login/alter_teacher/" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {% if message1 %}
+                            <div class="alert-warning">{{ message1 }}</div>
+                        {% endif %}
+                        <label class="col-sm-2 control-label font">我的姓名：</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control bt" style="width:150px" name="name"
+                                   value="{{ teacher.name }}">
+                        </div>
+                    </div>
+
+                    <br><br>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">我的邮箱：</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control bt" name="email" style="width:150px"
+                                   value="{{ teacher.email }}">
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">性别：</label>
+                        <div class="col-xs-10">
+                            <select name="sex" >
+                                {% if teacher.sex == 'male' %}
+                                    <option value="male" selected>男</option>
+                                    <option value="female">女</option>
+                                {% else %}
+                                    <option value="male">男</option>
+                                    <option value="female" selected>女</option>
+                                {% endif %}
+                            </select>
+
+                            <br>
+                            <input type="submit" class="button" value="提交">
+                        </div>
+                    </div>
+                    <br>
+
+                </form>
+
+            </div>
+            <br><br><br><br>
+            <div class="sub-header"></div>
+            <div>
+                <h4>修改密码</h4>
+                <form action="/login/teacher_alter_password/" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {% if message %}
+                            <div class="alert-warning">{{ message }}</div>
+                        {% endif %}
+                        <label class="col-sm-2 control-label font">原密码：</label>
+                        <div class="col-xs-10">
+                            <input type="password" class="form-control bt" style="width:150px" name="pwd0"
+                                   placeholder="请输入原密码">
+                        </div>
+                    </div>
+
+                    <br><br>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">新密码：</label>
+                        <div class="col-xs-10">
+                            <input type="password" class="form-control bt" name="pwd" style="width:150px" id="pwd"
+                                   placeholder="请设置登录密码">
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label font">确认密码：</label>
+                        <div class="col-xs-10">
+                            <input type="password" class="form-control bt" name="pwd" style="width:150px" id="pwd1"
+                                   placeholder="请再次填写密码"
+                                   onkeyup="validate()">
+                            <span id="tips"></span>
+                            <br>
+                            <input type="submit" class="button" disabled="disabled" id="button" value="提交">
+                        </div>
+                    </div>
+                    <br>
+
+                </form>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

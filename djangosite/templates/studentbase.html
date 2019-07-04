@@ -1,0 +1,44 @@
+
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/login/studentindex">计网在线自测系统</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/login/studentindex">主页</a></li>
+                    <li><a href="/exercise/chapter_test">章节测试</a></li>
+                    <li><a href="/exercise/final_test">期末测试</a></li>
+                    <li><a href="/exercise/my_mission">老师任务</a></li>
+                    <li><a href="/exercise/mytest">我的测试</a></li>
+                    <li><a href="/login/bbs_index">计网论坛</a></li>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {#              <li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>#}
+                    {% if request.session.is_login %}
+                        <li><a href="#">欢迎你，{{ request.session.user_name }}</a></li>
+                        <li><a href="/login/student_center/">个人中心</a></li>
+                        <li><a href="/login/logout/">注销</a></li>
+                    {% else %}
+                        <li><a href="/login/login">登录</a></li>
+                        <li>
+                            <a href="/login/register/"
+                               onclick="if (confirm('只有老师用户才能注册！确认注册吗？') === false)return false; ">注册</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+    </nav>
+
+</div>
+

@@ -1,0 +1,199 @@
+{#{% extends 'teacherbase.html' %}#}
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<!-- saved from url=(0043)https://v3.bootcss.com/examples/dashboard/# -->
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>登录</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    {#    <link title="orange" href="{% static 'css/login1.css' %}" rel="stylesheet" type="text/css">#}
+
+    <link rel="stylesheet" href="{% static 'css/lianxi.css' %}">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+
+
+    <style>
+        @keyframes cc {
+            0% {
+                opacity: 0.4;
+                transform: scale(0.1);
+                top: -500px;
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.1) rotateX(90deg);
+                top: -50px;
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotateX(0deg);
+                top: 0;
+            }
+        }
+
+        @media only screen and (max-width: 500px) {
+            .login {
+                width: 95% !important;
+            }
+
+            .sr {
+                padding: 30px 70px !important;
+            }
+        }
+
+        .login {
+            float: right;
+            opacity: 0.8;
+            width: 380px;
+            position: absolute;
+            top: 0;
+            right: 100px;
+            margin: 15% auto;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+            color: #27d;
+            animation: cc 4s ease-in-out;
+        }
+
+        .login header {
+
+            padding: 10px;
+            border-bottom: 1px solid #27d;
+        }
+
+        .login header h1 {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-size: 25px;
+            line-height: 40px;
+        }
+
+        .sr {
+            padding: 30px 90px;
+        }
+
+        .name {
+            position: relative;
+            margin-bottom: 20px;
+            clear: both;
+            border: 1px solid #27d;
+            width: 100%;
+            height: 40px;
+        }
+
+        .name label {
+            position: absolute;
+            color: #27d;
+            top: 10px;
+            left: 10px;
+        }
+
+        .name_inp {
+            padding-left: 34px;
+            height: 38px;
+            line-height: 38px;
+            line-height: 36px \9;
+            border: none;
+            background-color: #fff;
+            width: 100%;
+            outline: none;
+        }
+
+        .dl {
+            width: 150px;
+            height: 40px;
+            background: #27d;
+            line-height: 40px;
+            display: block;
+            margin: 0 auto;
+            color: #fff;
+            border: 0;
+            font-size: 18px;
+        }
+
+    </style>
+
+
+</head>
+
+
+<body background="{% static 'picture/gdpu.jpg' %}"
+      style="background-repeat:no-repeat ;background-size:100% 100%;background-attachment: fixed;">
+
+<div class="container-fluid">
+
+
+    <div class="row">
+        <div class="main_content">
+                <span class="logo">
+                	<img alt=""
+                         src="{% static 'picture/gdpu_logo.png' %}">
+                </span>
+        </div>
+
+        <div class="login">
+            <header>
+                <h1>《计算机网络》在线自测系统</h1>
+            </header>
+            <div class="sr">
+                <form>
+                    <div class="name">
+                        <label>
+                            <i class="sublist-icon glyphicon glyphicon-user"></i>
+                        </label>
+                        <input type="text" placeholder="登录名" class="name_inp">
+                    </div>
+                    <div class="name">
+                        <label>
+                            <i class="sublist-icon glyphicon glyphicon-pencil"></i>
+                        </label>
+                        <input type="text" placeholder="登录密码" class="name_inp">
+                    </div>
+                    <div align="right">
+                        <a href="">注册</a>
+                    </div><br>
+                    <button class="dl">登录</button>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+</body>
+
+
+</html>

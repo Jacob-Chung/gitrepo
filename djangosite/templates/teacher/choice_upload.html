@@ -1,0 +1,182 @@
+{#{% extends 'teacherbase.html' %}#}
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<!-- saved from url=(0043)https://v3.bootcss.com/examples/dashboard/# -->
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://v3.bootcss.com/favicon.ico">
+
+    <title>选择题导入</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+
+<body>
+{% include 'teacherbase.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/test_situation/">考试情况 <span
+                        class="sr-only">(current)</span></a></li>
+                <li><a href="/exercise/compose_test">出卷组题</a></li>
+                {#        <li><a href="https://v3.bootcss.com/examples/dashboard/#">试题批改</a></li>#}
+                <li><a href="/exercise/set_rules">出题规则</a></li>
+
+            </ul>
+            {#    <ul class="nav nav-sidebar">#}
+            {#        <li><a href="https://v3.bootcss.com/examples/dashboard/">论坛</a></li>#}
+            {#        <li><a href="https://v3.bootcss.com/examples/dashboard/">我的留言</a></li>#}
+            {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">One more nav</a></li>#}
+            {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">Another nav item</a></li>#}
+            {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">More navigation</a></li>#}
+            {#    </ul>#}
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/question_bank">题库审阅</a></li>
+                <li class="active"><a href="/exercise/choice_upload">选择题导入</a></li>
+                <li><a href="/exercise/fillin_upload">填空题导入</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/all_student">学生信息查询</a></li>
+                <li><a href="/exercise/student_upload">学生信息导入</a></li>
+                {#        <li><a href="/exercise/fillin_upload">填空题导入</a></li>#}
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/login/bbs_index/">计网论坛</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+            <h2 class="sub-header">请上传（选择题）</h2>
+            <h4>一键导入</h4>
+            <div>
+                <form action="/exercise/uploadGrade/" method="post"
+                      enctype="multipart/form-data">
+                    {% if message %}
+                        <div class="alert alert-warning">{{ message }}</div>
+                    {% endif %}
+
+                    {% csrf_token %}
+                    <input type="file" style="width: 50%" name="file" id="filename">
+                    <button type="submit">提交</button>
+                </form>
+            </div>
+            <br><br>
+
+            <h4>逐题导入</h4><br>
+            <form action="/exercise/insert_choice/" method="post">
+                {% csrf_token %}
+                <div class="form-group ">
+
+                    <label class="col-sm-2 control-label font">编号：</label>
+                    <div class="col-xs-10">
+                        <input type="text" style="width: 150px" class="form-control bt" name="questionId"
+                               value="{{ max_choice|add:1 }}" readonly>
+
+                    </div>
+                </div>
+                <br>
+
+                <div class="form-group ">
+                    <label class="col-sm-2 control-label font">所属章节：</label>
+                    <div class="col-xs-10">
+                        <input type="text" style="width: 150px" class="form-control bt" name="questionSection"
+                               placeholder="010101">
+
+                    </div>
+                </div>
+                <br>
+
+                <div class="form-group ">
+                    <label class="col-sm-2 control-label font">问题：</label>
+                    <div class="col-xs-10">
+                        <input type="text" style="width: 600px" class="form-control bt" name="questionContent">
+
+                    </div>
+                </div>
+                <br>
+
+                <div class="form-group ">
+                    <label class="col-sm-2 control-label font">选项A：</label>
+                    <div class="col-xs-10">
+                        <input type="text" style="width: 300px" class="form-control bt" name="answer1">
+
+                    </div>
+                </div>
+                <br>
+                <div class="form-group ">
+                    <label class="col-sm-2 control-label font">选项B：</label>
+                    <div class="col-xs-10">
+                        <input type="text" style="width: 300px" class="form-control bt" name="answer2">
+
+                    </div>
+                </div>
+                <br>
+
+                <div class="form-group ">
+                    <label class="col-sm-2 control-label font">选项C：</label>
+                    <div class="col-xs-10">
+                        <input type="text" style="width: 300px" class="form-control bt" name="answer3">
+
+                    </div>
+                </div>
+                <br>
+                <div class="form-group ">
+                    <label class="col-sm-2 control-label font">选项D：</label>
+                    <div class="col-xs-10">
+                        <input type="text" style="width: 300px" class="form-control bt" name="answer4">
+
+                    </div>
+                </div>
+                <br>
+                <div class="form-group ">
+                    <label class="col-sm-2 control-label font">正确答案：</label>
+                    <div class="col-xs-10">
+                        <input type="text" style="width: 150px" class="form-control bt" name="rightAnswer">
+
+                    </div>
+                </div>
+                <br><br>
+                <div class="col-md-offset-3">
+                    <input type="submit" value="提交" class="button">
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+</body>
+</html>

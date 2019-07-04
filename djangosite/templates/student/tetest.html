@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <title>问卷平台</title>
+    <style>
+        .fill-container .content[data-v-f0d9c8f2] {
+            padding: 3rem;
+            border-top: .2rem solid #ccc;
+            border-bottom: .2rem solid #ccc;
+        }
+
+        .fill-container footer[data-v-f0d9c8f2] {
+            height: 6rem;
+            margin-top: 3rem;
+            text-align: center;
+            line-height: 6rem;
+        }
+
+        .fill-container footer .submit[data-v-f0d9c8f2] {
+            width: 10rem;
+            height: 3rem;
+            padding-top: .3rem;
+            padding-bottom: .3rem;
+            line-height: 100%;
+            color: #fff;
+            border: .1rem solid #ee7419;
+            border-radius: .2rem;
+            background-color: #ee7419;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+
+    <div data-v-f0d9c8f2="" class="fill-container">
+        <h2 data-v-f0d9c8f2="">第一份问卷</h2>
+        <div data-v-f0d9c8f2="" class="content">
+            <div data-v-f0d9c8f2="" class="content-item"><p data-v-f0d9c8f2="" class="qs-title">
+                Q1&nbsp;单选题&nbsp;(单选题) *
+            </p>
+                <p data-v-f0d9c8f2="" class="option">
+                    <label data-v-f0d9c8f2="">
+                        <input data-v-f0d9c8f2="" type="radio" name="Q1-单选题" value="选项一"> <!---->选项一
+                    </label>
+                </p>
+                <p data-v-f0d9c8f2="" class="option">
+                    <label data-v-f0d9c8f2="">
+                        <input data-v-f0d9c8f2="" type="radio" name="Q1-单选题" value="选项二"> <!---->选项二
+                    </label>
+                </p> <!---->
+            </div>
+
+            <div data-v-f0d9c8f2="" class="content-item"><p data-v-f0d9c8f2="" class="qs-title">
+                Q3&nbsp;文本题&nbsp;(文本题) *
+            </p>  <textarea data-v-f0d9c8f2=""></textarea></div>
+        </div> <!---->
+        <footer data-v-f0d9c8f2="">
+            <button data-v-f0d9c8f2="" class="submit">提交</button>
+        </footer>
+    </div>
+</div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+{#{% extends 'teacherbase.html' %}#}
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<!-- saved from url=(0043)https://v3.bootcss.com/examples/dashboard/# -->
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://v3.bootcss.com/favicon.ico">
+
+    <title>出题规则</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        .bs-example {
+            position: relative;
+            padding: 45px 15px 15px;
+            margin: 0 -15px 15px;
+            border-color: #e5e5e5 #eee #eee;
+            border-style: solid;
+            border-width: 1px 0;
+            -webkit-box-shadow: inset 0 3px 6px rgba(0, 0, 0, .05);
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, .05);
+        }
+
+        table {
+            table-layout: fixed;
+            word-break: break-all;
+            word-wrap: break-word;
+        / / 表格固定布局
+        }
+
+
+    </style>
+
+</head>
+
+
+<body>
+{% include 'teacherbase.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/test_situation/">考试情况 <span
+                        class="sr-only">(current)</span></a></li>
+                <li><a href="/exercise/compose_test">出卷组题</a></li>
+                {#        <li><a href="https://v3.bootcss.com/examples/dashboard/#">试题批改</a></li>#}
+                <li class="active"><a href="/exercise/set_rules">出题规则</a></li>
+
+            </ul>
+            {#    <ul class="nav nav-sidebar">#}
+            {#        <li><a href="https://v3.bootcss.com/examples/dashboard/">论坛</a></li>#}
+            {#        <li><a href="https://v3.bootcss.com/examples/dashboard/">我的留言</a></li>#}
+            {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">One more nav</a></li>#}
+            {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">Another nav item</a></li>#}
+            {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">More navigation</a></li>#}
+            {#    </ul>#}
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/question_bank">题库审阅</a></li>
+                <li><a href="/exercise/choice_upload">选择题导入</a></li>
+                <li><a href="/exercise/fillin_upload">填空题导入</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/all_student">学生信息查询</a></li>
+                <li><a href="/exercise/student_upload">学生信息导入</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/login/bbs_index/">计网论坛</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">出题策略</h1>
+
+            <div class="row placeholders col-md-8">
+                <div class="bs-example" data-example-id="bordered-table">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>选择题</th>
+                            <th>填空题</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for li in rule_list %}
+                            {% if li.is_final == 0 %}
+                                <tr>
+                                    <th scope="row">章节测试</th>
+                                    <td>{{ li.choice_number }}</td>
+                                    <td>{{ li.fillin_number }}</td>
+                                </tr>
+
+                            {% else %}
+                                <tr>
+                                    <th scope="row">期末测试</th>
+                                    <td>{{ li.choice_number }}</td>
+                                    <td>{{ li.fillin_number }}</td>
+                                </tr>
+
+                            {% endif %}
+                        {% endfor %}
+
+
+                        </tbody>
+                    </table>
+                    <br><br>
+                    <form action="/exercise/set_rules/" method="post">
+                        {% if message %}
+                            <div class="alert-warning">{{ message }}</div>
+                        {% endif %}
+                        {% csrf_token %}
+                        <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <select name="is_final" id="is_final">
+                                        <option value="0">章节测试</option>
+                                        <option value="1">期末考试</option>
+                                    </select>
+                                </td>
+                                <td>选择题：<input type="text" name="choice_num"></td>
+                                <td>填空题：<input type="text" name="fillin_num"></td>
+                                <td><input type="submit" value="确认"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

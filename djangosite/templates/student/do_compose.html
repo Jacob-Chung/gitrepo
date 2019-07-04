@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>测试{{ test_name }}</title>
+
+    <!-- Bootstrap -->
+    <link href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    {#    <link rel="stylesheet" type="text/css" href="css/build.css">#}
+
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        function changeState(el) {
+            if (el.readOnly) el.checked = el.readOnly = false;
+            else if (!el.checked) el.readOnly = el.indeterminate = true;
+        }
+
+    </script>
+    <style>
+        .fill-container .content[data-v-f0d9c8f2] {
+            padding: 3rem;
+            border-top: .2rem solid #ccc;
+            border-bottom: .2rem solid #ccc;
+        }
+
+        .fill-container footer[data-v-f0d9c8f2] {
+            height: 6rem;
+            margin-top: 3rem;
+            text-align: center;
+            line-height: 6rem;
+        }
+
+        .fill-container footer .submit[data-v-f0d9c8f2] {
+            width: 10rem;
+            height: 3rem;
+            padding-top: .3rem;
+            padding-bottom: .3rem;
+            line-height: 100%;
+            color: #fff;
+            border: .1rem solid #ee7419;
+            border-radius: .2rem;
+            background-color: #ee7419;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container-fluid">
+    {% include 'studentbase.html' %}
+
+    <div class="row">
+
+        <div class="col-md-11 col-md-offset-1">
+{#            <h3>{{ test_name }}</h3>#}
+            <form id="chapter_test_form" name="chapter_test_form" method="post" action="/exercise/submit_compose/">
+
+                {% if message %}
+                    <div class="alert-warning">{{ message }}</div>
+                {% endif %}
+
+                {% csrf_token %}
+                <input type="hidden" name="test_name" value="{{ test_name }}">
+                <input type="hidden" name="choice_num" value="{{ choice_num }}">
+                <input type="hidden" name="fillin_num" value="{{ fillin_num }}">
+                <div data-v-f0d9c8f2="" class="fill-container">
+                    <h2 data-v-f0d9c8f2="">试卷名：{{ test_name }}</h2>
+                    <div data-v-f0d9c8f2="" class="content">
+                        {% for line in choice_paper %}
+                            <input type="hidden" name="choice_{{ forloop.counter }}_id" value="{{ line.questionId }}">
+
+                            <div data-v-f0d9c8f2="" class="content-item">
+                                <p data-v-f0d9c8f2="" class="qs-title">
+                                    {{ forloop.counter }}.&nbsp;&nbsp;{{ line.questionContent }}&nbsp;(单选题) *
+                                </p>
+                                <p data-v-f0d9c8f2="" class="option">
+                                    <label data-v-f0d9c8f2="">
+                                        <input data-v-f0d9c8f2="" type="radio" name="choice_{{ forloop.counter }}"
+                                               value="A" checked> <!---->A. {{ line.answer1 }}
+                                    </label>
+                                </p>
+                                <p data-v-f0d9c8f2="" class="option">
+                                    <label data-v-f0d9c8f2="">
+                                        <input data-v-f0d9c8f2="" type="radio" name="choice_{{ forloop.counter }}"
+                                               value="B"> <!---->B. {{ line.answer2 }}
+                                    </label>
+                                </p> <!---->
+                                <p data-v-f0d9c8f2="" class="option">
+                                    <label data-v-f0d9c8f2="">
+                                        <input data-v-f0d9c8f2="" type="radio" name="choice_{{ forloop.counter }}"
+                                               value="C"> <!---->C. {{ line.answer3 }}
+                                    </label>
+                                </p> <!---->
+                                <p data-v-f0d9c8f2="" class="option">
+                                    <label data-v-f0d9c8f2="">
+                                        <input data-v-f0d9c8f2="" type="radio" name="choice_{{ forloop.counter }}"
+                                               value="D"> <!---->D. {{ line.answer4 }}
+                                    </label>
+                                </p> <!---->
+                            </div>
+                        {% endfor %}
+                        <br><br>
+
+                        {% for line in fillin_paper %}
+                            <input type="hidden" name="fillin_{{ forloop.counter }}_id" value="{{ line.fillinId }}">
+
+                            <div data-v-f0d9c8f2="" class="content-item">
+                                <p data-v-f0d9c8f2="" class="qs-title">
+                                    {{ forloop.counter }}&nbsp;{{ line.fillinContent }}&nbsp;(填空题) *
+                                </p>
+                                {% if line.diff == 1 %}
+                                    <label>
+                                        <textarea data-v-f0d9c8f2="" name="fillin_{{ forloop.counter }}_answer1"></textarea>
+                                    </label>
+                                {% elif line.diff == 2 %}
+                                    <label>
+                                        <textarea data-v-f0d9c8f2="" name="fillin_{{ forloop.counter }}_answer1"></textarea>
+                                    </label>&nbsp;&nbsp;
+                                    <label>
+                                        <textarea data-v-f0d9c8f2="" name="fillin_{{ forloop.counter }}_answer2"></textarea>
+                                    </label>
+                                {% elif line.diff == 3 %}
+                                    <label>
+                                        <textarea data-v-f0d9c8f2="" name="fillin_{{ forloop.counter }}_answer1"></textarea>
+                                    </label>&nbsp;&nbsp;
+                                    <label>
+                                        <textarea data-v-f0d9c8f2="" name="fillin_{{ forloop.counter }}_answer2"></textarea>
+                                    </label>&nbsp;&nbsp;
+                                    <label>
+                                        <textarea data-v-f0d9c8f2="" name="fillin_{{ forloop.counter }}_answer3"></textarea>
+                                    </label>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div> <!---->
+                    <footer data-v-f0d9c8f2="">
+                        <input type="submit" data-v-f0d9c8f2="" class="submit" value="提交">
+{#                        <button data-v-f0d9c8f2="" class="submit">提交</button>#}
+                    </footer>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

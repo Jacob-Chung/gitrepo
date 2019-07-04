@@ -1,0 +1,205 @@
+{#{% extends 'teacherbase.html' %}#}
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<!-- saved from url=(0043)https://v3.bootcss.com/examples/dashboard/# -->
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>填空题组卷</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/lianxi.css' %}">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+
+
+    <style>
+
+        canvas {
+            background: #9AA4FF;
+        }
+
+    </style>
+    <script>
+        $(document).ready(function () {
+            $('#check_all').click(function () {
+                if ($(this).prop('checked'))
+
+                    $('input:checkbox').each(function () {
+                        $(this).prop('checked', true);
+                    });
+                else
+                    $('input:checkbox').each(function () {
+                        $(this).prop('checked', false)
+                    });
+
+            });
+
+            $('#check_all1').click(function () {
+                if ($(this).prop('checked'))
+
+                    $('input:checkbox').each(function () {
+                        $(this).prop('checked', true);
+                    });
+                else
+                    $('input:checkbox').each(function () {
+                        $(this).prop('checked', false)
+                    });
+
+            });
+
+
+            $('#submit_bt').click(function () {
+                var test_name = $('#test_name').val();
+                if (confirm('您确定要提交吗?')) {
+
+                    $('input:checkbox:checked').each(function () {
+                        var list = new Array();
+                        if ($(this).attr("id") !== "check_all") {
+                            list.push($(this).val());
+                            {#var list =#}
+                        }
+
+                        {#list = $.makeArray(list);#}
+                        $.ajax({
+                            url: "/exercise/submit_fillin/",
+                            type: "get",
+                            data: {'list': JSON.stringify(list), 'test_name': test_name},
+                            {#headers: {"X-CSRFtoken": $.cookie("csrftoken")},#}
+                            async: false,
+                            success: function (arg) {
+                                alert("提交成功");
+                                window.location.href = '/exercise/compose_test/';
+                            }
+                        });
+                    });
+
+                }
+            });
+
+
+        });
+    </script>
+
+
+</head>
+
+
+<body>
+{% include 'teacherbase.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/test_situation/">考试情况 <span
+                        class="sr-only">(current)</span></a></li>
+                <li class="active"><a href="/exercise/compose_test">出卷组题</a></li>
+                {#        <li><a href="https://v3.bootcss.com/examples/dashboard/#">试题批改</a></li>#}
+                <li><a href="/exercise/set_rules">出题规则</a></li>
+
+            </ul>
+            {#    <ul class="nav nav-sidebar">#}
+            {#        <li><a href="https://v3.bootcss.com/examples/dashboard/">论坛</a></li>#}
+            {#        <li><a href="https://v3.bootcss.com/examples/dashboard/">我的留言</a></li>#}
+            {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">One more nav</a></li>#}
+            {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">Another nav item</a></li>#}
+            {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">More navigation</a></li>#}
+            {#    </ul>#}
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/question_bank">题库审阅</a></li>
+                <li><a href="/exercise/choice_upload">选择题导入</a></li>
+                <li><a href="/exercise/fillin_upload">填空题导入</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/all_student">学生信息查询</a></li>
+                <li><a href="/exercise/student_upload">学生信息导入</a></li>
+                {#        <li><a href="/exercise/fillin_upload">填空题导入</a></li>#}
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/login/bbs_index/">计网论坛</a></li>
+            </ul>
+        </div>
+
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h2 class="sub-header">填空题组题</h2>
+
+            <div>
+                <input type="hidden" id="test_name" name="test_name" value="{{ test_name }}">
+                <table class="table table-bordered" border="1">
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="vehicle" id='check_all1'/>
+                        </th>
+                        <th>序号</th>
+                        <th>难度</th>
+                        <th>题目</th>
+                        <th>空一</th>
+                        <th>空二</th>
+                        <th>空三</th>
+                        <th>顺序</th>
+                        <th>章节</th>
+                        <th>分值</th>
+                    </tr>
+                    <tbody>
+
+                    {% for line in fillin_list %}
+                        <tr>
+                            <th>
+                                <input type="checkbox" name="checkbox" id="checkbox"
+                                       value="{{ line.fillinId }}">
+                            </th>
+                            <td>{{ line.fillinId }}</td>
+                            <td>{{ line.grade }}</td>
+                            <td>
+                                <a href="/exercise/view_fillin/?fillinId={{ line.fillinId }}">{{ line.fillinContent }}</a>
+                            </td>
+                            <td>{{ line.answer1 }}</td>
+                            <td>{{ line.answer2 }}</td>
+                            <td>{{ line.answer3 }}</td>
+                            <td>{{ line.is_order }}</td>
+                            <td>{{ line.fillinSection }}</td>
+                            <td>{{ line.diff }}</td>
+
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+                <input type="button" id="submit_bt" value="提交" onclick="return false">
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

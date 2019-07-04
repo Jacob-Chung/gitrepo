@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0048)https://bbs.meizu.cn/forum.php?mod=guide&view=my -->
+{% load staticfiles %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>我的帖子</title>
+
+    <meta name="keywords" content="">
+    <meta name="description" content=",魅族社区">
+    <meta name="generator" content="MEIZU 2013">
+    <meta name="author" content="MEIZU">
+    <meta name="copyright" content="2003-2013 Comsenz Inc.">
+    <meta name="MSSmartTagsPreventParsing" content="True">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta http-equiv="MSThemeCompatible" content="Yes">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_1_common.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_1_forum_forumdisplay.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common-49d764df8a.css' %}">
+
+    <meta property="wb:webmaster" content="f1284c3017204ff7">
+    <meta property="qc:admins" content="1300463313655125636">
+    <meta name="application-name" content="魅族社区">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="msapplication-tooltip" content="魅族社区">
+    <meta name="msapplication-task"
+          content="name=;action-uri=https://bbs.meizu.cn/portal.php;icon-uri=https://bbs.res.meizu.com/resources/php/bbs/static/image/common/portal.ico">
+    <meta name="msapplication-task"
+          content="name=版块;action-uri=https://bbs.meizu.cn/forum.php;icon-uri=https://bbs.res.meizu.com/resources/php/bbs/static/image/common/bbs.ico">
+    <meta name="msapplication-task"
+          content="name=;action-uri=https://bbs.meizu.cn/group.php;icon-uri=https://bbs.res.meizu.com/resources/php/bbs/static/image/common/group.ico">
+    <link rel="archives" title="魅族社区" href="https://bbs.meizu.cn/archiver/">
+
+
+    <link href="{% static 'css/main.v1.css' %}" rel="stylesheet" type="text/css">
+
+
+</head>
+
+<body id="nv_forum" class="pg_guide">
+
+<div id="hd">
+    <div id="w_header">
+
+
+        <div class="nav-wrap">
+            <div class="bbs-nav" id="nv">
+                <div class="bbs-logo">
+                    <a href="/login/bbs_index/">
+                        <img src="{% static 'picture/gdpu_logo.png' %}" alt="">
+                        <span>社区</span>
+                    </a>
+                </div>
+
+
+                <ul class="bbs-menu">
+                    <li>
+                        <a href="/login/my_post/">我的帖子</a>
+                    </li>
+                    <li>
+                        <a href="/login/login/">返回自测系统</a>
+                    </li>
+
+
+                    <li>
+                        {% if request.session.is_teacher == True %}
+                            <a href="/login/teacher_center/" target="_blank">欢迎你，{{ request.session.user_name }}</a>
+                        {% else %}
+                            <a href="/login/student_center/" target="_blank">欢迎你，{{ request.session.user_name }}</a>
+                        {% endif %}
+
+                    </li>
+                </ul>
+
+
+            </div>
+
+
+        </div>
+    </div> <!--header-->
+
+</div>
+
+<div id="wp" class="wp">
+    <style type="text/css">
+        .xl2 {
+            background: url(https://bbs.res.meizu.com/resources/php/bbs/static/image/common/vline.png) repeat-y 50% 0;
+        }
+
+        .xl2 li {
+            width: 49.9%;
+        }
+
+        .xl2 li em {
+            padding-right: 10px;
+        }
+
+        .xl2 .xl2_r em {
+            padding-right: 0;
+        }
+
+        .xl2 .xl2_r i {
+            padding-left: 10px;
+        }
+    </style>
+
+    <div class="boardnav">
+
+        <!-- 个人中心 帖子 -->
+        <div id="ct" class="ct2_a wp cl">
+            <div class="mn ct1_feed float_l">
+                <!-- 列表 -->
+                <div id="threadlist" class="tl bm cont_wp">
+                    <!-- 个人中心 帖子 -->
+                    <!--  -->
+                    <div class="thmenu">
+                        <div class="page_frame_navigation">
+                            <div class="follow_feed_cover" style="left:22px;"></div>
+                            <ul class="mbw tb cl page_frame_ul" style="padding-left:20px;">
+                                <li class="a"><a
+                                        href="">主题</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="guide_indicate bm_c">
+                        <table class="conbar_guide" cellspacing="0" cellpadding="0">
+                            <colgroup>
+                                <col width="330px">
+                                <col width="90px">
+                                <col width="90px">
+                                <col width="88px">
+                                <col width="108px">
+                                <col width="60px">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <td class="by">
+                                    标题
+                                </td>
+
+                                <td class="by">作者</td>
+
+                                <td class="by">发表时间</td>
+                                <td class="by" style=""><a onclick="delDraft(&#39;all&#39;,this)"
+                                                           href="javascript:;">操作</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--  -->
+
+                    <div class="guide_indicate bm_c">
+                        <div id="forumnew" style="display:none"></div>
+                        <table cellspacing="0" cellpadding="0" class="guide_theme">
+                            <colgroup>
+                                <col width="260px">
+                                <col width="90px">
+                                <col width="90px">
+                                <col width="88px">
+                                <col width="108px">
+                                <col width="60px">
+                            </colgroup>
+                            {% for foo in post %}
+                                <tbody id="normalthread_10836824" class="">
+                                <tr>
+                                    <!-- 发现 -->
+                                    <!-- 帖子 -->
+                                    <th class="common">
+                                        <div class="title_guidelist">
+                                            <a href="/login/post_detail/?post_id={{ foo.id }}" target="_blank"
+                                               class="xst" title="{{ foo.content }}">{{ foo.content }}</a></div>
+                                    </th>
+
+                                    <td class="by">
+                                        <cite>
+                                            {{ foo.user_name }}
+
+                                        </cite>
+                                    </td>
+
+                                    <td class="by" style="">
+                                        <div class="">
+                                            <em><a href="">
+                                                <span title="{{ foo.c_time }}">{{ foo.c_time }}</span></a></em>
+                                        </div>
+                                    </td>
+
+                                    <td class="by">
+                                        <a class="normalbtn bluebtn" style="width:50px;">
+                                            <button type="button" id="del_bt" style="width:50px;margin:0px;"
+                                                    value="{{ foo.id }}" name="topicsubmit" onclick="
+                                                        if (confirm('确认删除吗？'))
+                                                            window.location.href = '/login/del_post/?post_id={{ foo.id }}';
+                                                        else
+                                                            return false;
+                                            ">
+                                                <span>删除</span>
+                                            </button>
+                                        </a>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            {% endfor %}
+
+                            <!--回复-->
+
+                            <!--点评-->
+
+                        </table>
+                        <div class="cr"></div>
+                    </div>
+                    <div class="bm bw0 pgs cl pagebar">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

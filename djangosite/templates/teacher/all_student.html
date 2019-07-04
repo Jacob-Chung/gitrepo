@@ -1,0 +1,246 @@
+{#{% extends 'teacherbase.html' %}#}
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<!-- saved from url=(0043)https://v3.bootcss.com/examples/dashboard/# -->
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+
+    <title>题库-选择题</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="{% static 'js/bootstrap-table.min.js' %}"></script>
+    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-table-zh-CN.min.js' %}"></script>
+    <script src="{% static 'js/colResizable-1.6.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-table-resizable.min.js' %}"></script>
+
+    <script>
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+
+            if (arr = document.cookie.match(reg))
+
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+
+
+        // 查询订单 请求
+        $(document).ready(function () {
+            $('#check_all').click(function () {
+                if ($(this).prop('checked'))
+
+                    $('input:checkbox').each(function () {
+                        $(this).prop('checked', true);
+                    });
+                else
+                    $('input:checkbox').each(function () {
+                        $(this).prop('checked', false)
+                    });
+
+            });
+
+            $('#del_bt').click(function () {
+
+                if (confirm('删除后无法恢复，您确定要删除吗?')) {
+
+                    $('input:checkbox:checked').each(function () {
+                        var list = new Array();
+                        if ($(this).attr("id") !== "check_all") {
+                            list.push($(this).val());
+                            {#var list =#}
+                        }
+                        {#list = $.makeArray(list);#}
+                        $.ajax({
+                            url: "/exercise/del_student/",
+                            type: "get",
+                            data: {'list': JSON.stringify(list)},
+                            {#headers: {"X-CSRFtoken": $.cookie("csrftoken")},#}
+                            async: false,
+                            success: function (arg) {
+                                alert("删除成功");
+                                window.location.href = "/exercise/all_student/";
+                            }
+                        });
+                        {#$.post("/exercise/del_student/", {'list': list}, function (data, status) {#}
+                        {#        alert("删除成功");#}
+                        {#        window.location.href = "/exercise/all_student/";#}
+                        {#    }#}
+                        {#);#}
+                    });
+
+                }
+            })
+        });
+
+
+    </script>
+
+</head>
+
+
+<body>
+{% include 'teacherbase.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/test_situation/">考试情况 <span
+                        class="sr-only">(current)</span></a></li>
+                <li><a href="/exercise/compose_test">出卷组题</a></li>
+                {#        <li><a href="https://v3.bootcss.com/examples/dashboard/#">试题批改</a></li>#}
+                <li><a href="/exercise/set_rules">出题规则</a></li>
+
+            </ul>
+            {#    <ul class="nav nav-sidebar">#}
+            {#        <li><a href="https://v3.bootcss.com/examples/dashboard/">论坛</a></li>#}
+            {#        <li><a href="https://v3.bootcss.com/examples/dashboard/">我的留言</a></li>#}
+            {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">One more nav</a></li>#}
+            {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">Another nav item</a></li>#}
+            {#            <li><a href="https://v3.bootcss.com/examples/dashboard/">More navigation</a></li>#}
+            {#    </ul>#}
+            <ul class="nav nav-sidebar">
+                <li><a href="/exercise/question_bank">题库审阅</a></li>
+                <li><a href="/exercise/choice_upload">选择题导入</a></li>
+                <li><a href="/exercise/fillin_upload">填空题导入</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="/exercise/all_student">学生信息查询</a></li>
+                <li><a href="/exercise/student_upload">学生信息导入</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/login/bbs_index/">计网论坛</a></li>
+            </ul>
+        </div>
+
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            {#          <h1 class="page-header">题库审阅</h1>#}
+
+            <h2 class="sub-header">学生</h2>
+            <form action="/exercise/filter_student/" method="get">
+                <select name="my_major">
+                    {% for li in major_list %}
+                        <option value="{{ li.stu_major }}">{{ li.stu_major }}</option>
+                    {% endfor %}
+
+                </select>
+
+                <select name="stu_class">
+                    {% for li in class_list %}
+                        <option value="{{ li.stu_class }}">{{ li.stu_class }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="搜索">
+            </form>
+
+            <div id="queryResult" style="width: 91%;">
+
+
+                <table id="order_list" class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="vehicle" id='check_all'/>
+                        </th>
+                        <th>
+                            学号
+                        </th>
+                        <th>
+                            姓名
+                        </th>
+{#                        <th>#}
+{#                            密码#}
+{#                        </th>#}
+                        <th>
+                            专业
+                        </th>
+                        <th>
+                            班级
+                        </th>
+                        <th>
+                            性别
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for line in stu_list %}
+                        <tr>
+                            <th><input type="checkbox" name="checkbox" id="checkbox" value="{{ line.stu_Id }}"></th>
+                            <td><a href="/exercise/view_student/?stu_Id={{ line.stu_Id }}">{{ line.stu_Id }}</a></td>
+                            <td>{{ line.name }}</td>
+{#                            <td>{{ line.password }}</td>#}
+                            <td>{{ line.stu_major }}</td>
+                            <td>{{ line.stu_class }}</td>
+                            {% if line.sex == 'male' %}
+                                <td>男</td>
+                            {% else %}
+                                <td>女</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+                <input type="button" id="del_bt" value="删除" onclick="return false"><br>
+                <div class="pagination" style="text-align: center">
+                            <span class="step-links">
+                                {% if stu_list.has_previous %}
+                                    <a href="/exercise/all_student/?page={{ stu_list.previous_page_number }}">上一页</a>
+                                {% endif %}
+
+                                <span class="current">
+                                 &nbsp;  &nbsp;第{{ stu_list.number }}页  &nbsp;/  &nbsp;共{{ stu_list.paginator.num_pages }}页   &nbsp;&nbsp;
+                                </span>
+
+                                {% if stu_list.has_next %}
+                                    <a href="/exercise/all_student/?page={{ stu_list.next_page_number }}">下一页</a>
+                                {% endif %}
+                            </span>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/exercise/upload/" method="post" enctype="multipart/form-data" >
+    {% csrf_token %}
+    上传：
+    <input type="file" name="picture">
+    <input type="submit" value="上传">
+
+</form>
+</body>
+</html>
